@@ -4,6 +4,13 @@ project(cpp-utill LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Debug 모드에서 최적화 끄기
+if(MSVC)
+    set(CMAKE_CXX_FLAGS_DEBUG "/Od /Zi /DDEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+endif()
+
 # ---- 유틸리티 라이브러리 구성 ----
 
 # 헤더 및 소스 파일 나열
@@ -47,6 +54,13 @@ FetchContent_Declare(
     GIT_TAG release-1.12.1
 )
 FetchContent_MakeAvailable(googletest)
+
+# GoogleTest target alias 설정
+if(TARGET gtest AND NOT TARGET GTest::gtest)
+    add_library(GTest::gtest ALIAS gtest)
+    add_library(GTest::gtest_main ALIAS gtest_main)
+endif()
+
 
 # ---- 테스트 추가 ----
 
