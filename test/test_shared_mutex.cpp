@@ -10,6 +10,7 @@
 #include <atomic>
 #include <chrono>
 #include <iostream>
+#include <cassert>
 
 bool LargeKey::operator<(const LargeKey& other) const
 {
@@ -194,4 +195,50 @@ TEST(SharedMutexTest, BenchMarkSharedMutexLargeData)
 {
     run_shared_mutex_largeData();
     SUCCEED();
+}
+
+// Test case: Verifies shared lock functionality.
+void test_shared_lock()
+{
+    SharedMutex mutex;
+    SharedLockGuard lock(mutex);
+    std::cout << "Shared lock acquired successfully.\n";
+}
+
+// Test case: Verifies exclusive lock functionality.
+void test_exclusive_lock()
+{
+    SharedMutex mutex;
+    mutex.lock();
+    std::cout << "Exclusive lock acquired successfully.\n";
+    mutex.unlock();
+}
+
+// Test case: Verifies try_lock functionality.
+void test_try_lock()
+{
+    SharedMutex mutex;
+    assert(mutex.try_lock());
+    std::cout << "Try lock acquired successfully.\n";
+    mutex.unlock();
+}
+
+// Test case: Verifies try_lock_shared functionality.
+void test_try_lock_shared()
+{
+    SharedMutex mutex;
+    assert(mutex.try_lock_shared());
+    std::cout << "Try shared lock acquired successfully.\n";
+    mutex.unlock_shared();
+}
+
+// Main function to run all tests.
+int main()
+{
+    test_shared_lock();
+    test_exclusive_lock();
+    test_try_lock();
+    test_try_lock_shared();
+    std::cout << "All tests passed successfully.\n";
+    return 0;
 }
