@@ -197,48 +197,70 @@ TEST(SharedMutexTest, BenchMarkSharedMutexLargeData)
     SUCCEED();
 }
 
+using namespace cpputill; // Use the cpputill namespace for convenience
+
 // Test case: Verifies shared lock functionality.
 void test_shared_lock()
 {
-    SharedMutex mutex;
-    SharedLockGuard lock(mutex);
+    SharedMutex mutex; // Declare a SharedMutex instance
+    SharedLockGuard lock(mutex); // Acquire a shared lock
     std::cout << "Shared lock acquired successfully.\n";
 }
 
 // Test case: Verifies exclusive lock functionality.
 void test_exclusive_lock()
 {
-    SharedMutex mutex;
-    mutex.lock();
+    SharedMutex mutex; // Declare a SharedMutex instance
+    mutex.lock(); // Acquire an exclusive lock
     std::cout << "Exclusive lock acquired successfully.\n";
-    mutex.unlock();
+    mutex.unlock(); // Release the exclusive lock
 }
 
 // Test case: Verifies try_lock functionality.
 void test_try_lock()
 {
-    SharedMutex mutex;
-    assert(mutex.try_lock());
+    SharedMutex mutex; // Declare a SharedMutex instance
+    assert(mutex.try_lock()); // Try to acquire an exclusive lock
     std::cout << "Try lock acquired successfully.\n";
-    mutex.unlock();
+    mutex.unlock(); // Release the lock
 }
 
 // Test case: Verifies try_lock_shared functionality.
 void test_try_lock_shared()
 {
-    SharedMutex mutex;
-    assert(mutex.try_lock_shared());
+    SharedMutex mutex; // Declare a SharedMutex instance
+    assert(mutex.try_lock_shared()); // Try to acquire a shared lock
     std::cout << "Try shared lock acquired successfully.\n";
-    mutex.unlock_shared();
+    mutex.unlock_shared(); // Release the shared lock
 }
 
-// Main function to run all tests.
-int main()
+TEST(SharedMutexTest, SharedLockFunctionality)
 {
-    test_shared_lock();
-    test_exclusive_lock();
-    test_try_lock();
-    test_try_lock_shared();
-    std::cout << "All tests passed successfully.\n";
-    return 0;
+    cpputill::SharedMutex mutex; // Declare a SharedMutex instance
+    cpputill::SharedLockGuard lock(mutex); // Acquire a shared lock
+    SUCCEED() << "Shared lock acquired successfully.";
+}
+
+TEST(SharedMutexTest, ExclusiveLockFunctionality)
+{
+    cpputill::SharedMutex mutex; // Declare a SharedMutex instance
+    mutex.lock(); // Acquire an exclusive lock
+    SUCCEED() << "Exclusive lock acquired successfully.";
+    mutex.unlock(); // Release the exclusive lock
+}
+
+TEST(SharedMutexTest, TryLockFunctionality)
+{
+    cpputill::SharedMutex mutex; // Declare a SharedMutex instance
+    ASSERT_TRUE(mutex.try_lock()) << "Failed to acquire exclusive lock using try_lock.";
+    SUCCEED() << "Try lock acquired successfully.";
+    mutex.unlock(); // Release the lock
+}
+
+TEST(SharedMutexTest, TryLockSharedFunctionality)
+{
+    cpputill::SharedMutex mutex; // Declare a SharedMutex instance
+    ASSERT_TRUE(mutex.try_lock_shared()) << "Failed to acquire shared lock using try_lock_shared.";
+    SUCCEED() << "Try shared lock acquired successfully.";
+    mutex.unlock_shared(); // Release the shared lock
 }

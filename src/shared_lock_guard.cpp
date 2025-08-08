@@ -17,12 +17,6 @@ SharedLockGuard::~SharedLockGuard()
         m_mutex.unlock_shared();
 }
 
-// Disables copy constructor to prevent multiple ownership of the same lock.
-SharedLockGuard::SharedLockGuard(const SharedLockGuard&) = delete;
-
-// Disables copy assignment operator to prevent multiple ownership of the same lock.
-SharedLockGuard& SharedLockGuard::operator=(const SharedLockGuard&) = delete;
-
 // Releases the shared lock manually.
 void SharedLockGuard::unlock()
 {
